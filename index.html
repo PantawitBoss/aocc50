@@ -3,28 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>๕๐ ปี คปอ. เรียนรู้ประวัติผ่านเกม</title>
+<title>AOCC MINI GAME | 50 ปี คปอ.</title>
 
 <style>
+@font-face{font-family:'ThaiCharm';font-weight:400;font-style:normal;font-display:swap;size-adjust:112%;unicode-range:U+0E00-0E7F;src:url(assets/fonts/Charmonman-Regular.woff2) format('woff2')}
+@font-face{font-family:'ThaiCharm';font-weight:700;font-style:normal;font-display:swap;size-adjust:112%;unicode-range:U+0E00-0E7F;src:url(assets/fonts/Charmonman-Bold.woff2) format('woff2')}
 @font-face{font-family:'Charmonman';font-weight:700;font-style:normal;font-display:swap;src:url(assets/fonts/Charmonman-Bold.woff2) format('woff2')}
 @font-face{font-family:'Sarabun';font-weight:400;font-style:normal;font-display:swap;src:url(assets/fonts/Sarabun-Regular.woff2) format('woff2')}
 @font-face{font-family:'Sarabun';font-weight:700;font-style:normal;font-display:swap;src:url(assets/fonts/Sarabun-Bold.woff2) format('woff2')}
 @font-face{font-family:'Chakra Petch';font-weight:700;font-style:normal;font-display:swap;src:url(assets/fonts/ChakraPetch-Bold.woff2) format('woff2')}
 :root{--navy:#040914;--panel:#0d1c3d;--gold:#d4af37;--gold2:#fef08a;--red:#e24b4a;--ok:#34d399}
 *{box-sizing:border-box}[hidden]{display:none!important}
-html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 0,#13296a,var(--navy) 70%);color:#fff;font-family:Sarabun,system-ui,sans-serif;line-height:1.6;font-kerning:normal;text-rendering:optimizeLegibility}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 0,#13296a,var(--navy) 70%);color:#fff;font-family:ThaiCharm,Sarabun,system-ui,sans-serif;line-height:1.7;font-kerning:normal;text-rendering:optimizeLegibility}
 .scr{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));text-align:center}
 button{font:inherit;cursor:pointer}button:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
 .btn{background:linear-gradient(#f5d76e,var(--gold));color:#1a1405;border:0;border-radius:999px;padding:14px 28px;font-weight:700;font-size:1.1rem;min-height:48px}
 .btn.alt{background:transparent;color:var(--gold2);border:1px solid var(--gold)}
-#logo{width:min(80vw,440px);max-height:56vh;object-fit:contain;height:auto;filter:drop-shadow(0 10px 28px rgba(212,175,55,.35))}
+#logo{width:min(80vw,440px);max-height:42vh;object-fit:contain;height:auto;filter:drop-shadow(0 10px 28px rgba(212,175,55,.35))}
 #vid video{width:100%;max-width:1100px;max-height:78vh;background:#000;border-radius:12px}
 .msg{color:var(--gold2);margin:12px 0}
 .g{width:100%;max-width:720px}
 h2{margin:0 0 .35em;padding-top:.1em;color:var(--gold2);font-family:Charmonman,Sarabun,serif;font-weight:700;font-size:clamp(1.7rem,6vw,2.4rem);line-height:1.5;letter-spacing:0;word-spacing:.08em;text-wrap:balance;text-shadow:0 2px 14px rgba(212,175,55,.35)}p.s{margin:0 0 12px;color:#cbd5e1}
 .bar{height:10px;background:#1e293b;border-radius:99px;overflow:hidden;margin:6px 0 12px}
 #fill{height:100%;width:100%;background:var(--ok);transition:width .1s linear,background .3s}
-.hud{display:flex;justify-content:space-between;align-items:center;font-size:1.4rem;font-weight:700;font-family:'Chakra Petch',Sarabun,sans-serif;line-height:1.4}
+.hud{display:flex;justify-content:space-between;align-items:center;font-size:1.4rem;font-weight:700;font-family:ThaiCharm,'Chakra Petch',Sarabun,sans-serif;line-height:1.5}
 .tl{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;position:relative;margin:14px 0 4px;padding-top:14px}
 .tl:before{content:"";position:absolute;top:5px;left:2%;right:2%;border-top:3px solid var(--gold)}
 .slot{aspect-ratio:1;border:2px dashed #64748b;border-radius:10px;background:#0b1633;display:flex;align-items:center;justify-content:center;color:#64748b;font-weight:700;position:relative}
@@ -34,7 +36,7 @@ h2{margin:0 0 .35em;padding-top:.1em;color:var(--gold2);font-family:Charmonman,S
 @keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .ends{display:flex;justify-content:space-between;color:#94a3b8;font-size:.85rem;margin-bottom:12px}
 .pool{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px}
-.card{background:var(--panel);border:2px solid #334155;border-radius:10px;padding:6px;color:#fff;font-size:.72rem;line-height:1.2}
+.card{background:var(--panel);border:2px solid #334155;border-radius:10px;padding:6px;color:#fff;font-size:.8rem;line-height:1.4}
 .card img{width:100%;aspect-ratio:1;object-fit:contain;display:block;margin-bottom:4px;border-radius:6px;background:#0b1633}
 .card.sel{border-color:var(--gold2);box-shadow:0 0 0 2px var(--gold)}
 #ov{position:fixed;inset:0;background:rgba(4,9,20,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;z-index:9}
@@ -94,6 +96,17 @@ html{-webkit-text-size-adjust:100%}
 @keyframes tw{0%,100%{opacity:0;transform:scale(.2) rotate(0)}50%{opacity:1;transform:scale(1) rotate(45deg)}}
 @keyframes sw{to{left:115%}}
 @keyframes fin{from{opacity:0}to{opacity:1}}
+#home h1{margin:14px 0 14px;max-width:min(92vw,760px);font-family:Charmonman,Sarabun,serif;font-weight:700;color:var(--gold2);font-size:clamp(1.35rem,5.2vw,2.2rem);line-height:1.55;letter-spacing:0;word-spacing:.08em;text-wrap:balance;text-shadow:0 2px 14px rgba(212,175,55,.4)}
+#home h1 span{display:inline-block;white-space:nowrap}
+#home h1 .c{display:inline-block;animation:chIn .85s cubic-bezier(.2,.8,.2,1) var(--d) backwards}
+#home h1{animation:tagGlow 3.4s ease-in-out 3.2s infinite}
+@keyframes chIn{from{opacity:0;transform:translateY(14px) scale(.9);filter:blur(5px)}}
+@keyframes tagGlow{0%,100%{text-shadow:0 2px 14px rgba(212,175,55,.4)}50%{text-shadow:0 2px 26px rgba(255,215,90,.8)}}
+@keyframes orn{from{transform:scaleX(0);opacity:0}}
+.orn{animation:orn 1s ease 2.3s backwards;width:min(60vw,260px);height:2px;margin:0 auto 20px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.play{font-family:'Chakra Petch',Sarabun,sans-serif;letter-spacing:.12em;font-size:1.15rem;padding:14px 36px}
+#home .rise{animation:rise .9s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -101,7 +114,9 @@ html{-webkit-text-size-adjust:100%}
 
 <section id="home" class="scr">
   <img id="logo" src="assets/logo50.webp" alt="ตราสัญลักษณ์ครบรอบ ๕๐ ปี กองบัญชาการควบคุมการปฏิบัติทางอากาศ">
-  <button class="btn" onclick="begin()">เรียนรู้ประวัติผ่านเกม</button>
+  <h1 id="tag"><span>50 ปี คปอ.</span> <span>รากประวัติศาสตร์</span> <span>สู่การส่งต่อ</span> <span>อัตลักษณ์และเกียรติภูมิ</span></h1>
+  <div class="orn"></div>
+  <button class="btn play rise" style="animation-delay:2.5s" onclick="begin()">AOCC MINI GAME</button>
 </section>
 
 <section id="vid" class="scr" hidden>
@@ -450,6 +465,20 @@ function draw() {
   icon(g2.e, 'r', Math.atan2(g2.e.vy, g2.e.vx), 44);
   icon(f, 'g', f.h, 44);
 }
+
+// ---------- หัวข้อหน้าแรก: ค่อย ๆ ขึ้นทีละตัว (แยกตามพยัญชนะ+สระ+วรรณยุกต์ ไม่ให้ตัวอักษรไทยแตก) ----------
+(function () {
+  const el = $('tag');
+  el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
+  const split = t => (window.Intl && Intl.Segmenter)
+    ? [...new Intl.Segmenter('th', { granularity: 'grapheme' }).segment(t)].map(s => s.segment)
+    : t.match(/[\u0E00-\u0E7F][\u0E31\u0E33-\u0E3A\u0E47-\u0E4E]*|./gu);
+  let i = 0;
+  el.querySelectorAll(':scope > span').forEach(w => {
+    const t = w.textContent; w.setAttribute('aria-hidden', 'true');
+    w.innerHTML = split(t).map(c => `<span class="c" style="--d:${(0.35 + (i++) * 0.05).toFixed(2)}s">${c}</span>`).join('');
+  });
+})();
 </script>
 </body>
 </html>
