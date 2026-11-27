@@ -39,8 +39,9 @@ h2{margin:0 0 .35em;padding-top:.1em;color:var(--gold2);font-family:Charmonman,S
 .card{background:var(--panel);border:2px solid #334155;border-radius:10px;padding:6px;color:#fff;font-size:.8rem;line-height:1.4}
 .card img{width:100%;aspect-ratio:1;object-fit:contain;display:block;margin-bottom:4px;border-radius:6px;background:#0b1633}
 .card.sel{border-color:var(--gold2);box-shadow:0 0 0 2px var(--gold)}
-.card .hint{display:block;margin-bottom:2px;color:var(--gold2);font-size:.9em;font-weight:700;line-height:1.35}
-.card .nm{display:block;color:#cbd5e1;font-size:.9em}
+.sl{min-width:0}.sl .slot{width:100%}
+.hl{display:block;margin-top:5px;color:var(--gold2);font-size:.72rem;font-weight:700;line-height:1.35;overflow-wrap:anywhere}
+@media (min-width:900px){.hl{font-size:.85rem}}
 #ov{position:fixed;inset:0;background:rgba(4,9,20,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;z-index:9}
 #ov .big{font-size:4.5rem}#ov h2{font-size:clamp(2rem,7.5vw,2.7rem);margin-bottom:.25em}#ov p{max-width:440px;color:#e2e8f0;line-height:1.7}
 #cardimg{max-width:100%;max-height:78vh;border-radius:8px}
@@ -149,6 +150,7 @@ html{-webkit-text-size-adjust:100%}
     <div class="tl" id="slots"></div>
     <div class="ends"><span>เก่าที่สุด</span><span>ใหม่ที่สุด</span></div>
     <div class="pool" id="pool"></div>
+    <div style="margin-top:16px"><button class="btn alt" onclick="skipG1()">ข้ามเกม ›</button></div>
   </div>
 </section>
 
@@ -159,7 +161,10 @@ html{-webkit-text-size-adjust:100%}
     <div class="bar"><div id="fill2" style="height:100%;width:100%;background:var(--ok)"></div></div>
     <canvas id="cv" width="600" height="600"></canvas>
     <p class="s">ลากเส้นจากเครื่องบินรบ (เขียว) ไปหาศัตรู (แดง) หลบวงของเครื่องบินโดยสาร (ฟ้า)</p>
-    <button class="btn alt" onclick="if(g2.ph==='plan')launch()">ส่งคำสั่งเลย</button>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn alt" onclick="if(g2.ph==='plan')launch()">ส่งคำสั่งเลย</button>
+      <button class="btn alt" onclick="skipG2()">ข้ามเกม ›</button>
+    </div>
   </div>
 </section>
 
@@ -279,7 +284,7 @@ const DEMO2 = `<svg class="d2" viewBox="0 0 300 200" role="img" aria-label="ต�
 <text font-size="22" text-anchor="middle" opacity="0">👆<animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;.04;.08;.42;.46;1" dur="7s" repeatCount="indefinite"/><animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;.08;.42;1" calcMode="linear"><mpath href="#dp"/></animateMotion></text>
 </svg>
 <div class="dcap"><span>① ลากเส้นจากเครื่องบินรบ (เขียว) ไปหาศัตรู (แดง)</span><span>② เส้นต้องไม่แตะวงเครื่องบินโดยสาร (ฟ้า)</span><span>③ ปล่อยแล้วเครื่องบินจะบินตามเส้น</span></div>`;
-let lives, left, sel, done, timer, over;
+let lives, left, sel, done, timer, over, boomT;
 
 const seen = {};   // ตัวอย่างวิธีเล่นแสดงครั้งแรกครั้งเดียว (เล่นซ้ำไม่แสดงอีก)
 function ov(icon, title, text, label, cb, demo = '') {
@@ -292,10 +297,10 @@ function startG1() {
   show('g1'); clearInterval(timer);
   lives = LIVES; left = TIME; sel = null; done = 0; over = false;
   $('bsvg').classList.remove('safe', 'hot'); $('bsvg').style.visibility = '';
-  $('slots').innerHTML = ORDER.map((_, i) => `<button class="slot" data-i="${i}" onclick="place(${i})">${i + 1}</button>`).join('');
+  $('slots').innerHTML = ORDER.map((k, i) => `<div class="sl"><button class="slot" data-i="${i}" onclick="place(${i})">${i + 1}</button><span class="hl">${HINTS[k]}</span></div>`).join('');
   let deck;
   do { deck = [...ORDER].sort(() => Math.random() - .5); } while (deck.every((k, i) => k === ORDER[i]));
-  $('pool').innerHTML = deck.map(k => `<button class="card" data-k="${k}" onclick="pick('${k}')"><img src="assets/${k}.webp" alt=""><b class="hint">${HINTS[k]}</b><span class="nm">${ITEMS[k]}</span></button>`).join('');
+  $('pool').innerHTML = deck.map(k => `<button class="card" data-k="${k}" onclick="pick('${k}')"><img src="assets/${k}.webp" alt=""><span>${ITEMS[k]}</span></button>`).join('');
   hud();
   ov('💣', 'ปลดระเบิดภายใน ๒๐ วินาที', 'คลิกรูปก่อน แล้วค่อยคลิกช่องบนไทม์ไลน์ที่เลือก เรียงเหตุการณ์จากเก่าไปใหม่ มี ๓ ชีวิต วางผิดเสียหนึ่งชีวิต', 'เริ่ม!', () => { seen.g1 = true; run(); }, seen.g1 ? '' : DEMO1);
 }
@@ -347,7 +352,13 @@ function explode() {
 function boom() {
   if (over) return; over = true; clearInterval(timer); beep(90, .6, 'sawtooth');
   $('bt').textContent = '00:00'; explode();
-  setTimeout(() => ov('💥', 'บึ้ม!', COMFORT[Math.floor(Math.random() * COMFORT.length)], 'ลองใหม่', startG1), 1100);
+  boomT = setTimeout(() => ov('💥', 'บึ้ม!', COMFORT[Math.floor(Math.random() * COMFORT.length)], 'ลองใหม่', startG1), 1100);
+}
+
+function skipG1() {
+  clearInterval(timer); clearTimeout(boomT); over = true;
+  $('fx').hidden = true; $('g1').classList.remove('shake');
+  next();
 }
 
 // ---------- เกมที่ 2: GCI ----------
@@ -392,6 +403,10 @@ function level() {
 function launch() {
   if (g2.path.length < 2) return end(false, 'หมดเวลาแล้ว ต้องลากเส้นก่อนครบ ๕ วินาทีนะ ไม่เป็นไร ลองอีกครั้ง');
   g2.ph = 'fly'; beep(600, .1);
+}
+function skipG2() {
+  cancelAnimationFrame(g2.raf); g2.ph = 'end';
+  next();
 }
 function end(win, msg) {
   g2.ph = 'end';
